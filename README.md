@@ -7,7 +7,7 @@ Let's not let them.
 
 The Trump Endorsement Reminder Chrome Extension places endorsement quotes as epithets in the names of politicians. For example, `Paul Ryan` becomes `Paul "we have more common ground than disagreement" Ryan`.
 
-## Traversing the DOM
+# Traversing the DOM
 
 `function walk(rootNode)
 {
@@ -18,8 +18,9 @@ The Trump Endorsement Reminder Chrome Extension places endorsement quotes as epi
         null,
         false
     ),
-    node;
+    node;`
 
+    `// Modify each text node's value
     while (node = walker.nextNode()) {
         handleText(node);
     }
@@ -30,7 +31,9 @@ function handleText(textNode) {
 }
 `
 
-`function observerCallback(mutations) {
+
+`// The callback used for the document body and title observers
+function observerCallback(mutations) {
     var i;
 
     mutations.forEach(function(mutation) {
@@ -46,6 +49,7 @@ function handleText(textNode) {
     });
 }
 
+// Walk the doc (document) body, replace the title, and observe the body and title
 function walkAndObserve(doc) {
     var docTitle = doc.getElementsByTagName('title')[0],
     observerConfig = {
@@ -55,15 +59,19 @@ function walkAndObserve(doc) {
     },
     bodyObserver, titleObserver;
 
+    // Do the initial text replacements in the document body and title
     walk(doc.body);
     doc.title = replaceText(doc.title);
 
+    // Observe the body so that we replace text in any added/modified nodes
     bodyObserver = new MutationObserver(observerCallback);
     bodyObserver.observe(doc.body, observerConfig);
 
+    // Observe the title so we can handle any modifications there
     if (docTitle) {
         titleObserver = new MutationObserver(observerCallback);
         titleObserver.observe(docTitle, observerConfig);
     }
 }
-walkAndObserve(document);`
+walkAndObserve(document);
+`
